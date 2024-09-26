@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2 reais ou um engraçadinho misterioso</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ADD8E6; /* Fundo azul bebê */
+            text-align: center;
+            color: black;
+            padding: 55px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #B0E0E6; /* Azul bebê */
+            padding: 80px;
+            border-radius: 10px;
+            color: black;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+        .options {
+            margin-top: 20px;
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            background-color: #87CEEB; /* Azul bebê */
+            color: black;
+            font-size: 22px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: left;
+            padding-left: 30px;
+            position: relative;
+            font-weight: bold;
+        }
+        .options button.correct {
+            background-color: green;
+        }
+        .options button.incorrect {
+            background-color: red;
+        }
+        .options button.disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #logoCoracao {
+            max-width: 500px; /* Aumentando o tamanho da imagem */
+            margin: 20px auto;
+            display: block;
+        }
+        .start-screen {
+            display: block;
+            text-align: center;
+        }
+        .start-screen h2 {
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+        .start-screen button {
+            font-size: 22px;
+            padding: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 20px 0;
+            background-color: #4682B4; /* Azul aço */
+            color: white;
+        }
+        .start-screen button:hover {
+            background-color: #4169E1; /* Azul real */
+        }
+        .hidden {
+            display: none;
+        }
+        .end-card {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            color: #000;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+        .end-card h2 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .end-card p {
+            font-size: 24px;
+        }
+        #romanticoImage {
+            max-width: 300px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Tela de início com a imagem de coração centralizada e o novo texto -->
+    <div class="start-screen" id="startScreen">
+        <img id="logoCoracao" src="imagens/Coração.png" alt="Coração">
+        <h2>2 reais ou um engraçadinho misterioso ?   &#10084;
+        </h2>
+        <button id="startButton">Iniciar</button>
+    </div>
+
+    <!-- Tela de perguntas com a imagem de coração -->
+    <div class="container hidden" id="gameContainer">
+        <img id="logoCoracao" src="imagens/Coração.png" alt="Coração">
+        <h1 id="question">Pergunta</h1>
+        <div class="options">
+            <button data-number="1" onclick="checkAnswer(0)">Opção 1</button>
+            <button data-number="2" onclick="checkAnswer(1)">Opção 2</button>
+            <button data-number="3" onclick="checkAnswer(2)">Opção 3</button>
+        </div>
+    </div>
+
+    <!-- Tela final com a imagem "romantico" -->
+    <div class="container hidden" id="endScreen">
+        <div class="end-card" id="endCard">
+            <h2>Fim de Jogo!</h2>
+            <p id="finalMessage">Você aceitou viver um romance!</p>
+            <img id="romanticoImage" src="imagens/romantico.png" alt="Romântico">
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+
+        document.getElementById('startButton').addEventListener('click', startGame);
+
+        function checkAnswer(answer) {
+            const buttons = document.querySelectorAll('.options button');
+            const correctAnswer = questions[currentQuestion].correct;
+
+            if (answer === correctAnswer) {
+                buttons[answer].classList.add('correct');
+            } else {
+                buttons[answer].classList.add('incorrect');
+                buttons[correctAnswer].classList.add('correct');
+            }
+
+            buttons.forEach(button => button.disabled = true);
+
+            setTimeout(() => {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    loadQuestion();
+                } else {
+                    endGame();
+                }
+            }, 2000);
+        }
+
+        const questions = [
+            {
+                question: "1. O cachorro faz?",
+                options: ["Canta", "Dança", "Faz churrasco"],
+                correct: 0
+            },
+            {
+                question: "2. A água é?",
+                options: ["Mágica", "Elétrica", "Invisível"],
+                correct: 0
+            },
+            {
+                question: "3. O céu durante o dia é?",
+                options: ["Roxo", "Cheio de estrelas", "Cor de abacaxi"],
+                correct: 0
+            },
+            {
+                question: "4. O sol nasce de manhã ou à?",
+                options: ["De tarde", "À noite", "Nunca"],
+                correct: 1
+            },
+            {
+                question: "5. O que o gato faz?",
+                options: ["Toca piano", "Salta no lava-jato", "Voa com balões"],
+                correct: 0
+            },
+            {
+                question: "6. Onde as vacas moram?",
+                options: ["Na geladeira", "Na lua", "No mar"],
+                correct: 0
+            },
+            {
+                question: "7. Quem nasce primeiro?",
+                options: ["O pão", "A lua", "O trovão"],
+                correct: 1
+            },
+            {
+                question: "8. Quando está frio usamos?",
+                options: ["Sorvete", "Piscina", "Sunga"],
+                correct: 0
+            },
+            {
+                question: "9. O leite vem da?",
+                options: ["Cobra", "Vaca voadora", "Árvore"],
+                correct: 0
+            },
+            {
+                question: "10. O super-herói que voa é?",
+                options: ["Seu tio", "O motorista do ônibus", "Um pato"],
+                correct: 0
+            },
+            {
+                question: "11. Você aceita viver um romance comigo?",
+                options: ["Sim", "Claro", "Não"],
+                correct: 0,
+                disableOption: 2
+            }
+        ];
+
+        function startGame() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('gameContainer').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const questionElement = document.getElementById('question');
+            const options = document.querySelectorAll('.options button');
+
+            questionElement.textContent = questions[currentQuestion].question;
+            options.forEach((button, index) => {
+                button.textContent = `${questions[currentQuestion].options[index]}`;
+                button.classList.remove('correct', 'incorrect');
+                button.disabled = false;
+
+                if (questions[currentQuestion].disableOption === index) {
+                    button.disabled = true;
+                    button.classList.add('disabled');
+                }
+            });
+        }
+
+        function endGame() {
+            document.getElementById('gameContainer').classList.add('hidden');
+            document.getElementById('endScreen').classList.remove('hidden');
+        }
+    </script>
+
+</body>
+</html>
